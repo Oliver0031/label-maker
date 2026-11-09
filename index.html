@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice & Label Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- pdf-lib CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <!-- PDF.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+  <!-- Header with Shop Branding Placeholder -->
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="brand-logo-placeholder" id="brand-logo" aria-label="Shop Branding Logo">
+        <span class="brand-icon">🏬</span>
+        <span class="brand-name">Your Shop Branding</span>
+      </div>
+    </div>
+    <div class="header-title-container">
+      <h1 class="header-title">Invoice &amp; Label Studio</h1>
+      <p class="header-subtitle">Combine Tax Invoices &amp; Shipping Labels onto Single A4 Sheets</p>
+    </div>
+  </header>
+
+  <!-- Main Container: Responsive Two-Column UI -->
+  <main class="app-container">
+    <!-- Left Sidebar: Controls & Upload -->
+    <aside class="sidebar">
+      <!-- Upload Drop Zone -->
+      <section class="panel upload-panel">
+        <h2 class="panel-title">Upload Documents</h2>
+        <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Upload PDFs (Invoice & Label) drop zone">
+          <div class="drop-zone-icon">📄</div>
+          <p class="drop-zone-text"><strong>Upload PDFs (Invoice &amp; Label)</strong></p>
+          <p class="drop-zone-subtext">Drag &amp; drop files here, or <span class="browse-link">browse</span></p>
+          <input type="file" id="file-input" class="file-input" accept="application/pdf" multiple>
+        </div>
+        <div class="uploaded-files-list" id="uploaded-files-list"></div>
+      </section>
+
+      <!-- Label Configuration & Product Name -->
+      <section class="panel settings-panel">
+        <h2 class="panel-title">Configuration</h2>
+
+        <div class="form-group">
+          <label for="product-prefix">Product Name Prefix</label>
+          <input type="text" id="product-prefix" class="form-control" placeholder="e.g. SKU / ITEM -" value="">
+          <small class="form-help">Auto-extracted product details or custom prefix for the export.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="extracted-product-name">Extracted Product Name</label>
+          <input type="text" id="extracted-product-name" class="form-control" placeholder="Auto-detected from label..." readonly>
+        </div>
+
+        <fieldset class="position-controls-group">
+          <legend class="group-title">Label Position Controls</legend>
+          <div class="control-grid">
+            <div class="form-group">
+              <label for="pos-x">X Position (pt)</label>
+              <input type="number" id="pos-x" class="form-control" value="30" step="5">
+            </div>
+            <div class="form-group">
+              <label for="pos-y">Y Position (pt)</label>
+              <input type="number" id="pos-y" class="form-control" value="30" step="5">
+            </div>
+            <div class="form-group full-width">
+              <label for="pos-rotation">Rotation (degrees)</label>
+              <select id="pos-rotation" class="form-control">
+                <option value="0">0° (Standard)</option>
+                <option value="90" selected>90° (Clockwise / Horizontal)</option>
+                <option value="180">180° (Inverted)</option>
+                <option value="270">270° (Counter-Clockwise)</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="action-buttons">
+          <button id="generate-btn" class="btn btn-primary" disabled>
+            <span class="btn-icon">⚡</span> Generate Combined PDF
+          </button>
+          <button id="download-btn" class="btn btn-secondary" style="display: none;">
+            <span class="btn-icon">📥</span> Download Merged PDF
+          </button>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Main Canvas Stage: Merged A4 Preview -->
+    <section class="main-stage">
+      <div class="stage-header">
+        <h2 class="stage-title">A4 Merged Output Preview</h2>
+        <div class="stage-actions">
+          <button id="print-btn" class="btn btn-small" title="Print document">🖨️ Print</button>
+          <span class="badge" id="page-status">No document loaded</span>
+        </div>
+      </div>
+
+      <div class="preview-viewport">
+        <!-- Visual preview box displaying the merged A4 output layout -->
+        <div class="preview-container" id="preview-container">
+          <div class="empty-state" id="empty-state">
+            <div class="empty-icon">📑</div>
+            <h3>No Output Generated Yet</h3>
+            <p>Upload your Tax Invoice &amp; Shipping Label PDFs to see the merged A4 preview here.</p>
+          </div>
+          <canvas id="pdf-preview-canvas" class="pdf-canvas" style="display: none;"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/pdf-combiner.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
